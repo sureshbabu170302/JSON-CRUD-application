@@ -1,6 +1,7 @@
-const fetchButton = document.getElementById("fetchBtn");
+const fetchButton = document.querySelector("#available-posts button");
 const listElements = document.querySelector(".posts");
 const postTemplate = document.getElementById("single-post");
+const form = document.querySelector("#new-post form");
 
 function sendHttpRequest(method, url, data) {
   const promise = new Promise((resolve, reject) => {
@@ -39,4 +40,9 @@ async function createPost(title, content) {
 }
 
 fetchButton.addEventListener("click", fetchPosts);
-createPost("DUMMY", "A dummy post");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const enteredTitle = event.currentTarget.querySelector("#title").value;
+  const enteredContent = event.currentTarget.querySelector("#content").value;
+  createPost(enteredTitle, enteredContent);
+});
