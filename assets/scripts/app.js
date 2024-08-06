@@ -23,19 +23,27 @@ function sendHttpRequest(method, url, data) {
   // return promise;
   return fetch(url, {
     method: method,
-    body: JSON.stringify(data)
+    body: data,
+
   }).then(response => {
-    return response.json();
-  });
+    if(response.status >= 200 && response.status < 300){
+      return response.json();
+    } else {
+      throw new Error('Something went erong - server side');
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    throw new Error('Something went wrong!');
+  })
 }
 
 async function fetchPosts() {
-  // try {
-    const responseData = await sendHttpRequest(
-      "GET",
+  try {
+    const responseData = await axios.get(
       "https://jsonplaceholder.typicode.com/posts"
     );
-    const listOfPosts = responseData;
+    const listOfPosts = responseData.data;
     for (const post of listOfPosts) {
       const postEl = document.importNode(postTemplate.content, true);
       postEl.querySelector("h2").textContent = post.title.toUpperCase();
@@ -43,9 +51,9 @@ async function fetchPosts() {
       postEl.querySelector("li").id = post.id;
       listElements.append(postEl);
     }
-  // } catch(error) {
-  //   console.error(error);
-  // }
+  } catch(error) {
+    console.error(error);
+  }
 }
 
 async function createPost(title, content) {
@@ -55,7 +63,13 @@ async function createPost(title, content) {
     body: content,
     userId: userId,
   };
-  sendHttpRequest("POST", "https://jsonplaceholder.typicode.com/posts", post);
+   
+  const fd = new FormData(form);
+  // fd.append('title', title);
+  // fd.append('body', content);
+  fd.append('userId', userId);
+
+  sendHttpRequest("POST", "https://jsonplaceholder.typicode.com/posts", fd);
 }
 
 form.addEventListener("submit", (event) => {
