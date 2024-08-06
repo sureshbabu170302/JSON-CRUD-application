@@ -22,5 +22,6 @@ This is a simple web application demonstrating how to make HTTP requests using A
    ```bash
    git clone https://github.com/sureshbabu170302/JSON-CRUD-application.git
    cd JSON-CRUD-application
-2. **Open index.html:**
+2. **Open index.html:**:
+
    Open the index.html file in your web browser to use the application.
